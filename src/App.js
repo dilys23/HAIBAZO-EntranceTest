@@ -20,7 +20,6 @@ function App() {
       setclickNumbers([]);
       setStatus('playing');
       setDeciseconds(0);
-
       const positions = {};
       newNumbers.forEach((number) => {
         positions[number] = getRandomPosition();
@@ -31,7 +30,6 @@ function App() {
 
   const handleButtonClick = (number) => {
     if (status !== 'playing') return;
-
     if (number === clickNumbers.length + 1) {
       setclickNumbers([...clickNumbers, number])
       if (clickNumbers.length === numbers.length - 1) {
@@ -67,14 +65,14 @@ function App() {
 
 
   const getRandomPosition = () => {
-    const top = Math.floor(Math.random() * 90); // giá trị từ 0 đến 90%
-    const left = Math.floor(Math.random() * 90); // giá trị từ 0 đến 90%
+    const top = Math.floor(Math.random() * 90);
+    const left = Math.floor(Math.random() * 90); 
     return { top: `${top}%`, left: `${left}%` };
   };
 
   return (
     <div className="App">
-      <h1>Number Sequence Game</h1>
+      <h1>LET'S PLAY</h1>
       <div className='input-point'>
         <label>
           Points 
