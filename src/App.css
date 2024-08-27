@@ -20,9 +20,30 @@
 
 .box-number
 {
+  position: relative;
   margin: 50px 410px 0px 410px;
   border: 0.5px solid;
-  min-width: 200px;
-  min-height: 350px;
-  text-align: center;
+  width: 500px;
+  height: 350px;
+  
 }
+
+label{
+  margin-right: 120px
+}
+.time-box, .btn-start
+{
+  margin: 0px 280px 5px 0px ;
+}
+.btn-number
+{
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+  
+}
+.btn-number:hover
+{
+  background-color: red;
+  color: white;
+} 

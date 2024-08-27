@@ -5,8 +5,9 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [numbers, setNumbers] = useState([]);
   const [clickNumbers, setclickNumbers] = useState([]);
-  const [status, setStatus] = useState('idle'); 
+  const [status, setStatus] = useState('idle');
   const [deciseconds, setDeciseconds] = useState(0);
+  const [numberPositions, setNumberPositions] = useState({});
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
@@ -19,7 +20,13 @@ function App() {
       setclickNumbers([]);
       setStatus('playing');
       setDeciseconds(0);
-    }
+
+      const positions = {};
+      newNumbers.forEach((number) => {
+        positions[number] = getRandomPosition();
+    });
+    setNumberPositions(positions);
+  }
   };
 
   const handleButtonClick = (number) => {
@@ -29,9 +36,9 @@ function App() {
       setclickNumbers([...clickNumbers, number])
       if (clickNumbers.length === numbers.length - 1) {
         setStatus('won');
-      } 
+      }
     } else {
-      setStatus('lost'); 
+      setStatus('lost');
     }
   };
 
@@ -40,29 +47,38 @@ function App() {
     setNumbers([]);
     setclickNumbers([]);
     setStatus('idle');
-    setDeciseconds(0); 
+    setDeciseconds(0);
+    setNumberPositions({});
   };
 
 
-    useEffect(() => {
-      let timer = null; 
-      if ( status === 'playing') {
-        timer = setInterval(() => {
-          setDeciseconds((prevDeciseconds) => prevDeciseconds + 1);
-        }, 100);
-      } else if ( status === 'won' || status === 'lost') {
-        clearInterval(timer);
-      }
+  useEffect(() => {
+    let timer = null;
+    if (status === 'playing') {
+      timer = setInterval(() => {
+        setDeciseconds((prevDeciseconds) => prevDeciseconds + 1);
+      }, 100);
+    } else if (status === 'won' || status === 'lost') {
+      clearInterval(timer);
+    }
 
-      return () => clearInterval(timer);
-    }, [status]);
+    return () => clearInterval(timer);
+  }, [status]);
 
-   
+
+  const getRandomPosition = () => {
+    const top = Math.floor(Math.random() * 90); // giá trị từ 0 đến 90%
+    const left = Math.floor(Math.random() * 90); // giá trị từ 0 đến 90%
+    return { top: `${top}%`, left: `${left}%` };
+  };
 
   return (
     <div className="App">
       <h1>Number Sequence Game</h1>
-      <div>
+      <div className='input-point'>
+        <label>
+          Points 
+        </label>
         <input
           type="number"
           value={inputValue}
@@ -71,30 +87,31 @@ function App() {
           disabled={status === 'playing' && numbers.length > 0}
         />
       </div>
+       
+        <div className='time-box'>Time: {deciseconds}</div>
+      
       <div>
-        <button onClick={startGame} disabled={status === 'playing' && numbers.length > 0}>
+        <button className='btn-start' onClick={startGame} disabled={status === 'playing' && numbers.length > 0}>
           Start Game
         </button>
       </div>
 
-      <div>
-        <div>Time (Deciseconds): {deciseconds}</div> 
-      </div>
+      
 
       {status === 'won' && <h2>You Won!</h2>}
       {status === 'lost' && <h2>Game Over!</h2>}
-<div>
-  <div className='box-number'>
-        {numbers.map((number) =>
-          !clickNumbers.includes(number) ? ( 
-            <button key={number} onClick={() => handleButtonClick(number)}>
-              {number}
-            </button>
-          ) : null
-        )}
+      <div>
+        <div className='box-number'>
+          {numbers.map((number) =>
+            !clickNumbers.includes(number) ? (
+              <button className='btn-number' key={number} onClick={() => handleButtonClick(number)}  style={{ position: 'absolute', ...numberPositions[number] }} >
+                {number}
+              </button> 
+            ) : null
+          )}
+        </div>
       </div>
-</div>
-      
+
 
       {(status === 'won' || status === 'lost') && (
         <button onClick={resetGame}>Reset Game</button>
